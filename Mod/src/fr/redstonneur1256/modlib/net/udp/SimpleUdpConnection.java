@@ -51,7 +51,9 @@ public class SimpleUdpConnection {
     }
 
     protected void close(boolean timeout) {
-        checkClosed();
+        if (closed) {
+            return;
+        }
         closed = true;
 
         manager.submit(() -> {

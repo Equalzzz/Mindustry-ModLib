@@ -17,7 +17,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * A simple class managing multiple UDP connections from a single thread
@@ -34,7 +34,7 @@ public class UdpConnectionManager {
     public UdpConnectionManager() {
         try {
             this.connections = new PriorityQueue<>(Comparator.comparingLong(SimpleUdpConnection::getRemainingTime));
-            this.taskQueue = new ConcurrentLinkedDeque<>();
+            this.taskQueue = new ConcurrentLinkedQueue<>();
             this.selector = Selector.open();
             this.thread = Threads.daemon(getClass().getSimpleName(), this::run);
             this.shutdown = false;
