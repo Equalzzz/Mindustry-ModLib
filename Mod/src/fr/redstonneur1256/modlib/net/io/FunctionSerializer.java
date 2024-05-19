@@ -15,7 +15,6 @@ public class FunctionSerializer<T> implements Serializer<T> {
         this.writer = writer;
     }
 
-
     @Override
     public T read(Reads reads) {
         return reader.get(reads);

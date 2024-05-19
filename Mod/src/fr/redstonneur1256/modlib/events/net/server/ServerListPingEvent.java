@@ -9,13 +9,13 @@ import mindustry.net.Administration;
 
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
-import static mindustry.Vars.charset;
+import static mindustry.Vars.*;
 
 /**
- * Event called when a user ping the Mindustry server, all fields lengths limit have been removed however
- * it will break if the combined length of the fields versionType, name, description, map and custom gamemode
- * exceeds 478 bytes or if a single string is more than 256 bytes
+ * Event called when a user ping the Mindustry server, vanilla field length limits does not apply. it is however recommended
+ * to respect them as going over might cause string values to be trimmed.
  */
 public class ServerListPingEvent {
 
@@ -100,30 +100,35 @@ public class ServerListPingEvent {
      * @return the encoded server data
      */
     public ByteBuffer writeServerData() {
-        ByteBuffer buffer = ByteBuffer.allocate(500);
+        ByteBuffer buffer = ByteBuffer.allocate(512);
 
-        writeString(buffer, name);
-        writeString(buffer, map);
+        int reservedSpace = 1 + 1 + 4 + 4 + 4 + 1 + 1 + 4 + 1 + (customGamemode != null ? 1 : 0);
+
+        writeString(buffer, name, buffer.remaining() - reservedSpace);
+        writeString(buffer, map, buffer.remaining() - reservedSpace);
 
         buffer.putInt(playerCount);
         buffer.putInt(wave);
 
         buffer.putInt(versionBuild);
-        writeString(buffer, versionType);
+        writeString(buffer, versionType, buffer.remaining() - reservedSpace);
 
         buffer.put((byte) gamemode.ordinal());
         buffer.putInt(playerLimit);
 
-        writeString(buffer, description);
+        writeString(buffer, description, buffer.remaining() - reservedSpace);
         if (customGamemode != null) {
-            writeString(buffer, customGamemode);
+            writeString(buffer, customGamemode, buffer.remaining() - reservedSpace);
         }
 
         return buffer;
     }
 
-    private static void writeString(ByteBuffer buffer, String string) {
+    private static void writeString(ByteBuffer buffer, String string, int maxLength) {
         byte[] bytes = string.getBytes(charset);
+        if (bytes.length > maxLength) {
+            bytes = Arrays.copyOf(bytes, Math.max(maxLength, 0));
+        }
         buffer.put((byte) bytes.length);
         buffer.put(bytes);
     }

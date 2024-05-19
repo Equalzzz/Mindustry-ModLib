@@ -17,21 +17,6 @@ public class CustomPacketExample {
         // Register a custom packet, for this example a simple packet containing a String
         PacketManager.registerPacket(MessagePacket.class, MessagePacket::new);
 
-        /*
-         * You can either unregister packet handlers by doing
-         * 1:
-         *  - MVars.net.unregisterClient(Class, Cons)
-         *  - MVars.net.unregisterServer(Class, Cons2)
-         * 2:
-         *  By registering your listener with
-         *   - MVars.net.registerClient(Class, Cons)
-         *   - MVars.net.registerServer(Class, Cons2)
-         *  instead of Vars.net.handleClient/Server
-         *  and then calling unregister()
-         *
-         * Note that you can also register multiple listeners per packet type
-         */
-
         // Handle that packet on the server side, here its just printing the packet content and the sender name
         Vars.net.handleServer(MessagePacket.class,
                 (connection, packet) -> Log.info("Received custom message '@' from @", packet.message, connection.player.name));

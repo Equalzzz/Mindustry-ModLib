@@ -20,12 +20,9 @@ import java.nio.ByteBuffer;
 @Mixin(ArcNetProvider.PacketSerializer.class)
 public abstract class ArcPacketSerializerMixin {
 
-    @Shadow
-    ThreadLocal<ByteBuffer> decompressBuffer;
-    @Shadow
-    ThreadLocal<Reads> reads;
-    @Shadow
-    ThreadLocal<Writes> writes;
+    @Shadow ThreadLocal<ByteBuffer> decompressBuffer;
+    @Shadow ThreadLocal<Reads> reads;
+    @Shadow ThreadLocal<Writes> writes;
 
     /**
      * @author Redstonneur1256
@@ -57,7 +54,7 @@ public abstract class ArcPacketSerializerMixin {
                 return;
             }
 
-            NetworkUtil.writeExtendedByte(buffer, id);
+            NetworkUtil.writeVarInt(buffer, id);
 
             ByteBuffer packetBuffer = decompressBuffer.get();
             packetBuffer.position(0);
@@ -98,7 +95,7 @@ public abstract class ArcPacketSerializerMixin {
         }
 
         buffer.position(buffer.position() - 1);
-        id = NetworkUtil.readExtendedByte(buffer::get);
+        id = NetworkUtil.readVarInt(buffer::get);
 
         ByteBuffer packetBuffer = decompressBuffer.get();
         int length = buffer.getShort() & 0xffff;
@@ -115,7 +112,6 @@ public abstract class ArcPacketSerializerMixin {
 
         ClassEntry<Packet> entry = PacketManager.getEntry(id);
         if (entry == null) {
-            Log.warn("Received unknown packet with id @", id);
             return null;
         }
 

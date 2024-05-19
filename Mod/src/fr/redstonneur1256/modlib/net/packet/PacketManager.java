@@ -135,10 +135,9 @@ public class PacketManager {
             String name = stream.readUTF();
             ClassEntry<?> entry = registeredPackets.find(e -> e.type.getName().equals(name));
             activePackets.add(entry);
-            if (entry == null) {
-                continue;
+            if (entry != null) {
+                packetIds.put(entry.type, i);
             }
-            packetIds.put(entry.type, i);
         }
     }
 

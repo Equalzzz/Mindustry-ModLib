@@ -9,8 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(Player.class)
 public class PlayerMixin implements NetworkDebuggable {
 
-    @Shadow
-    public transient NetConnection con;
+    public transient @Shadow NetConnection con;
 
     @Override
     public long getPing() {

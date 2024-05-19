@@ -5,29 +5,21 @@ import java.lang.reflect.Method;
 
 public class CallMethod {
 
-    private CallClass<?> callClass;
-    private Side side;
-    private Execution execution;
-    private Method method;
-    private int id;
+    private final CallClass<?> owner;
+    private final Method method;
+    private final Execution execution;
+    private final Side side;
+    private int networkId;
 
-    public CallMethod(CallClass<?> callClass, Side side, Execution execution, Method method) {
-        this.callClass = callClass;
-        this.side = side;
-        this.execution = execution;
+    public CallMethod(CallClass<?> owner, Method method, Execution execution, Side side) {
+        this.owner = owner;
         this.method = method;
+        this.execution = execution;
+        this.side = side;
     }
 
     public Object invoke(Object[] arguments) throws InvocationTargetException, IllegalAccessException {
-        return method.invoke(callClass.getImplementation(), arguments);
-    }
-
-    public Side getSide() {
-        return side;
-    }
-
-    public Execution getExecution() {
-        return execution;
+        return method.invoke(owner.getImplementation(), arguments);
     }
 
     public String getName() {
@@ -38,16 +30,28 @@ public class CallMethod {
         return method.getParameterTypes();
     }
 
+    public CallClass<?> getOwner() {
+        return owner;
+    }
+
     public Method getMethod() {
         return method;
     }
 
-    public int getId() {
-        return id;
+    public Execution getExecution() {
+        return execution;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Side getSide() {
+        return side;
+    }
+
+    public int getNetworkId() {
+        return networkId;
+    }
+
+    public void setNetworkId(int networkId) {
+        this.networkId = networkId;
     }
 
 }

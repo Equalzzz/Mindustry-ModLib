@@ -13,10 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Sounds.class)
 public class SoundsMixin {
 
-    @Shadow
-    private static IntMap<Sound> idToSound;
-    @Shadow
-    private static ObjectIntMap<Sound> soundToId;
+    private static @Shadow IntMap<Sound> idToSound;
+    private static @Shadow ObjectIntMap<Sound> soundToId;
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void init(CallbackInfo ci) {

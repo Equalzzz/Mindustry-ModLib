@@ -1,6 +1,7 @@
 package fr.redstonneur1256.modlib;
 
 import fr.redstonneur1256.modlib.launcher.LauncherInitializer;
+import fr.redstonneur1256.modlib.launcher.ModLibLauncher;
 import fr.redstonneur1256.modlib.net.MNet;
 import fr.redstonneur1256.modlib.ui.MUI;
 import mindustry.Vars;
@@ -26,6 +27,11 @@ public class ModLib extends Mod {
 
     public static String getVersion() {
         return Vars.mods.getMod(ModLib.class).meta.version;
+    }
+
+    public static void restartOnExit(boolean reloadLauncher) {
+        ModLibLauncher.launcher.restartGame = true;
+        ModLibLauncher.launcher.fastRestart = !reloadLauncher;
     }
 
 }

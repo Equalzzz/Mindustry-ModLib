@@ -1,7 +1,6 @@
 package fr.redstonneur1256.modlib.mixins.net;
 
 import arc.Events;
-import arc.func.Cons;
 import arc.func.Prov;
 import arc.struct.IntMap;
 import fr.redstonneur1256.modlib.MVars;
@@ -12,7 +11,11 @@ import fr.redstonneur1256.modlib.net.packet.MConnection;
 import fr.redstonneur1256.modlib.net.packet.MPacket;
 import fr.redstonneur1256.modlib.net.packet.PacketManager;
 import fr.redstonneur1256.modlib.net.packet.PacketTypeAccessor;
-import mindustry.net.*;
+import mindustry.net.Net;
+import mindustry.net.NetConnection;
+import mindustry.net.Packet;
+import mindustry.net.Packets;
+import mindustry.net.Streamable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,40 +23,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.concurrent.ExecutorService;
-
 @Mixin(Net.class)
 public class NetMixin {
 
-    @Final
-    @Shadow
-    private ExecutorService pingExecutor;
-    @Shadow
-    private boolean active;
-    @Shadow
-    private Streamable.StreamBuilder currentStream;
-    @Final
-    @Shadow
-    private IntMap<Streamable.StreamBuilder> streams;
+    private @Shadow boolean active;
+    private @Shadow Streamable.StreamBuilder currentStream;
+    private @Shadow @Final IntMap<Streamable.StreamBuilder> streams;
 
     @Inject(method = "handleException", at = @At("RETURN"))
     public void handleException(Throwable throwable, CallbackInfo ci) {
         Events.fire(new NetExceptionEvent(throwable));
-    }
-
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void init(Net.NetProvider provider, CallbackInfo ci) {
-        // Foo's client moved the pingExecutor initialisation inside the pingHost method causing this to crash the game
-        if (pingExecutor != null) {
-            pingExecutor.shutdown();
-        }
-    }
-
-    @Inject(method = "pingHost", at = @At("HEAD"), cancellable = true)
-    public void pingHost(String address, int port, Cons<Host> valid, Cons<Exception> failed, CallbackInfo ci) {
-        ci.cancel();
-
-        MVars.net.getPing().ping(address, port, valid, failed);
     }
 
     @Inject(method = "connect", at = @At("HEAD"))

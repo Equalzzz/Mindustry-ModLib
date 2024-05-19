@@ -162,7 +162,7 @@ public class MTypeIO {
     }
 
     public static Object readObject(Reads reads) {
-        int id = NetworkUtil.readExtendedByte(reads::b);
+        int id = NetworkUtil.readVarInt(reads::b);
         if (id == 0) {
             return null;
         }
@@ -177,7 +177,7 @@ public class MTypeIO {
     @SuppressWarnings("unchecked")
     public static void writeObject(Writes writes, Object object) {
         if (object == null) {
-            NetworkUtil.writeExtendedByte(writes::b, 0);
+            NetworkUtil.writeVarInt(writes::b, 0);
             return;
         }
 
@@ -191,7 +191,7 @@ public class MTypeIO {
             throw new SerializationException("Could not find a type serializer for the object " + object + " (" + object.getClass().getName() + ")");
         }
 
-        NetworkUtil.writeExtendedByte(writes::b, serializer.getId());
+        NetworkUtil.writeVarInt(writes::b, serializer.getId());
         ((ObjectSerializer<Object>) serializer).write(writes, object);
     }
 

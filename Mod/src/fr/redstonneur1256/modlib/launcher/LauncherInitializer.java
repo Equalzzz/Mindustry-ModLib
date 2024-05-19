@@ -23,7 +23,7 @@ import java.util.List;
 public class LauncherInitializer {
 
     public static boolean isInitialized() {
-        return doesClassExist("fr.redstonneur1256.modlib.launcher.ModLibLauncher");
+        return doesClassExist("fr.redstonneur1256.modlib.launcher.ModLibLauncher") || Boolean.getBoolean("modlib.android-launcher-loaded");
     }
 
     public static boolean isBundledJVM() {
@@ -119,10 +119,8 @@ public class LauncherInitializer {
                 Core.settings.load();
             }
 
-            if (Vars.headless) {
-                System.exit(0);
-            }
             Core.app.exit();
+            System.exit(process.exitValue());
         } catch (Throwable throwable) {
             // Startup failed, revert changes that could cause problems
             Core.settings.setAutosave(true);

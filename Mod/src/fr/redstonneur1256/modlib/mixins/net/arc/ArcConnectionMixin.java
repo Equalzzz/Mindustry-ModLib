@@ -20,7 +20,11 @@ import mindustry.net.ArcNetProvider;
 import mindustry.net.Streamable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -31,9 +35,7 @@ import java.util.concurrent.TimeUnit;
 @Mixin(targets = "mindustry.net.ArcNetProvider$ArcConnection")
 public abstract class ArcConnectionMixin implements MPlayerConnection, MConnection, NetworkDebuggable {
 
-    @Shadow
-    @Final
-    public Connection connection;
+    public @Shadow @Final Connection connection;
 
     private @Unique int nonce = 1;
     private @Unique IntMap<WaitingListener<?>> listeners = new IntMap<>();

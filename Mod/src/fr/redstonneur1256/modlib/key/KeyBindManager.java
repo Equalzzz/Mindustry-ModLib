@@ -10,7 +10,10 @@ import arc.KeyBinds;
 public class KeyBindManager {
 
     public static void registerKeyBinds(KeyBinds.KeyBind... binds) {
-        ((KeyBindAccessor) Core.keybinds).registerKeyBinds(binds);
+        // silently fail instead of crashing if a mod calls the method before the game is restarted
+        if (Core.keybinds instanceof KeyBindAccessor) {
+            ((KeyBindAccessor) Core.keybinds).registerKeyBinds(binds);
+        }
     }
 
 }

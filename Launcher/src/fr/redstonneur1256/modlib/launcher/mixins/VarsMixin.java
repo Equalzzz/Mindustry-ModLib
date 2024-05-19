@@ -1,6 +1,7 @@
 package fr.redstonneur1256.modlib.launcher.mixins;
 
 import arc.Events;
+import arc.struct.ObjectSet;
 import arc.struct.Seq;
 import arc.struct.StringMap;
 import arc.util.Log;
@@ -8,8 +9,10 @@ import arc.util.Strings;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,22 +20,17 @@ import java.time.format.DateTimeFormatter;
 @Mixin(Vars.class)
 public class VarsMixin {
 
-    @Shadow
-    public static boolean loadedLogger;
+    public static @Shadow boolean loadedLogger;
+    public static @Shadow boolean headless;
 
-    @Shadow
-    public static boolean headless;
+    @Inject(method = "loadLogger", at = @At("HEAD"), cancellable = true)
+    private static void loadCustomLogger(CallbackInfo ci) {
+        if (loadedLogger || Boolean.getBoolean("modlib.disableLogger")) return;
 
-    /**
-     * @author Redstonneur1256
-     * @reason fully replace the built-in logger by our custom one
-     */
-    @Overwrite
-    public static void loadLogger() {
-        if (loadedLogger) return;
+        ci.cancel();
 
         StringMap simpleClassNames = new StringMap();
-        Seq<String> hiddenClasses = Seq.with("arc.util.Log");
+        ObjectSet<String> hiddenClasses = ObjectSet.with("arc.util.Log");
 
         String[] levels = { "DEBUG", "INFO", "WARN", "ERROR", "NONE" };
         String[] colors = { "royal", "green", "yellow", "scarlet", "gray" };

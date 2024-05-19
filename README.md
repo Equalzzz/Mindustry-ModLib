@@ -19,14 +19,12 @@ Current development tools:
 * `Call` like classes supporting custom parameters and return values
 * Synchronized registrable types in TypeIO
 * Custom keybind registration
+* Improved logger
 
-Current game utilities/optimizations:
------
-
-* 📃 Logger showing calling class name
-* 📶 Optimized server ping & dns lookup, no longer creating a billion threads
-* 📶 Button to refresh the server list
-* 💥 Handled `Events` and `Timer` exceptions
+Mod Installation:
+----
+Desktop/Steam you can download the mod from the mod browser or from the releases page (ModLib).  
+Android: Coming soon ~~Download the mod launcher from the [releases pages](https://github.com/Redstonneur1256/Mindustry-ModLib/releases/), install the application and follow the steps from the application.~~
 
 Using the library:
 -----
@@ -35,13 +33,13 @@ Using the library:
   ```groovy
     repositories {
         mavenCentral()
-        maven { url 'https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository' }
-        maven { url 'https://jitpack.io/' }
-        maven { url 'https://repo.mc-skyplex.net/releases' }
+        maven { url "https://raw.githubusercontent.com/Anuken/MindustryMaven/master/repository" }
+        maven { url "https://jitpack.io/" }
+        maven { url "https://repo.mc-skyplex.net/releases" }
     }
     
     dependencies {
-        compileOnly 'com.github.Redstonneur1256.Mindustry-ModLib:Mod:VERSION'
+        compileOnly("com.github.Redstonneur1256.Mindustry-ModLib:Mod:VERSION")
     }
   ```
 - Update your `mod.json`/`plugin.json` to add the library as a dependency.

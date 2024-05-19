@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,11 +17,9 @@ import java.io.ByteArrayOutputStream;
 @Mixin(Streamable.StreamBuilder.class)
 public class StreamBuilderMixin implements PacketTypeAccessor {
 
-    @Shadow
-    @Final
-    public ByteArrayOutputStream stream;
+    public @Shadow @Final ByteArrayOutputStream stream;
 
-    private int extendedType;
+    private @Unique int extendedType;
 
     /**
      * @author Redstonneur1256

@@ -19,7 +19,6 @@ import fr.redstonneur1256.modlib.net.packet.MPlayerConnection;
 import fr.redstonneur1256.modlib.net.packet.PacketManager;
 import fr.redstonneur1256.modlib.net.packets.DataAckPacket;
 import fr.redstonneur1256.modlib.net.udp.UdpConnectionManager;
-import fr.redstonneur1256.modlib.util.dns.SimpleDns;
 import mindustry.Vars;
 import mindustry.io.SaveVersion;
 import mindustry.net.ArcNetProvider;
@@ -42,8 +41,6 @@ public class MNet implements MConnection {
     public static final LZ4Compressor compressor = Reflect.get(ArcNetProvider.class, "compressor");
 
     private UdpConnectionManager udpConnectionManager;
-    private SimpleDns dns;
-    private ServerPing ping;
     /**
      * Scheduler used for player pings on server side and packet timeouts
      */
@@ -55,8 +52,6 @@ public class MNet implements MConnection {
 
     public MNet() {
         this.udpConnectionManager = new UdpConnectionManager();
-        this.dns = new SimpleDns(udpConnectionManager);
-        this.ping = new ServerPing(udpConnectionManager, dns);
         this.scheduler = Executors.newSingleThreadScheduledExecutor(runnable -> {
             Thread thread = new Thread(runnable);
             thread.setDaemon(true);
@@ -85,7 +80,7 @@ public class MNet implements MConnection {
 
                 if (!event.offline) {
                     ByteBuffer buffer = event.writeServerData();
-                    buffer.position(0);
+                    buffer.flip();
                     handler.respond(buffer);
                 }
 
@@ -172,14 +167,6 @@ public class MNet implements MConnection {
 
     public UdpConnectionManager getUdpConnectionManager() {
         return udpConnectionManager;
-    }
-
-    public SimpleDns getDns() {
-        return dns;
-    }
-
-    public ServerPing getPing() {
-        return ping;
     }
 
     public ScheduledExecutorService getScheduler() {

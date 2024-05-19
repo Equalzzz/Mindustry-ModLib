@@ -7,7 +7,6 @@ import arc.util.io.ByteBufferOutput;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 public class NetworkUtil {
@@ -25,7 +24,7 @@ public class NetworkUtil {
         return Writes.get(output);
     }
 
-    public static int readExtendedByte(Intp byteReader) {
+    public static int readVarInt(Intp byteReader) {
         int value = 0;
         int shift = 0;
         int read;
@@ -39,7 +38,7 @@ public class NetworkUtil {
         return value;
     }
 
-    public static void writeExtendedByte(Intc byteWriter, int value) {
+    public static void writeVarInt(Intc byteWriter, int value) {
         while ((value & ~0x7F) != 0) {
             byteWriter.get((value & 0x7F) | 0x80);
             value >>>= 7;
@@ -47,17 +46,8 @@ public class NetworkUtil {
         byteWriter.get(value);
     }
 
-    public static void writeExtendedByte(ByteBuffer buffer, int value) {
-        writeExtendedByte(i -> buffer.put((byte) i), value);
-    }
-
-    /**
-     * Utility method to call {@link Buffer}'s clear method directly because it's being overridden by the classes extending
-     * {@link Buffer} in new Java versions and compiling in a new version would result in wrong signatures causing a
-     * {@link NoSuchMethodException}
-     */
-    public static void clear(Buffer buffer) {
-        buffer.clear();
+    public static void writeVarInt(ByteBuffer buffer, int value) {
+        writeVarInt(i -> buffer.put((byte) i), value);
     }
 
 }

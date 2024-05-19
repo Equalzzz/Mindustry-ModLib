@@ -5,6 +5,7 @@ import arc.input.InputDevice;
 import arc.input.KeyCode;
 import fr.redstonneur1256.modlib.key.KeyBindManager;
 
+// This class is defined as an enum similarly to the base game, it doesn't need to be
 public enum ExampleKeyBinds implements KeyBinds.KeyBind {
 
     demo(KeyCode.j, "example-mod");

@@ -60,24 +60,26 @@ public class CallManager {
         if (Vars.net.active()) {
             throw new IllegalStateException("Cannot register new call classes while connected to a server or hosting a server");
         }
+        if (!type.isInterface()) {
+            throw new RuntimeException("Expected interface but got " + type);
+        }
 
         Seq<CallMethod> methods = new Seq<>();
-        CallClass<T> callClass = new CallClass<>(type, implementation, methods);
+        CallClass<T> clazz = new CallClass<>(type, implementation, methods);
 
         for (Method method : type.getDeclaredMethods()) {
-            Class<?> returnType = method.getReturnType();
-            if (!returnType.equals(CallResult.class) && !returnType.equals(void.class)) {
-                Log.warn("The method @#@ does not return CallResult or void and will be ignored", type.getName(), method.getName());
+            if (!method.isAnnotationPresent(Remote.class)) {
+                Log.warn("Found method @ on @ but method is lacking @Remote annotation and will be ignored", method.getName(), type);
                 continue;
             }
-
-            Side side = Side.BOTH;
-            Execution execution = Execution.MAIN;
-
             Remote remote = method.getAnnotation(Remote.class);
-            if (remote != null) {
-                side = remote.side();
-                execution = remote.execution();
+            Class<?> returnType = method.getReturnType();
+
+            Side side = remote.side();
+            Execution execution = remote.execution();
+
+            if (!returnType.equals(CallResult.class) && !returnType.equals(void.class)) {
+                throw new RuntimeException(String.format("Expected method to return CallResult or void but got %s for %s", method.getReturnType(), getMethodSignature(method)));
             }
 
             Class<?>[] parameters = method.getParameterTypes();
@@ -86,10 +88,13 @@ public class CallManager {
                 continue;
             }
 
-            methods.add(new CallMethod(callClass, side, execution, method));
+            methods.add(new CallMethod(clazz, method, execution, side));
         }
 
-        registeredClasses.put(type.getName(), callClass);
+        if (registeredClasses.containsKey(type.getName())) {
+            Log.err("Remote Call class with type @ is already registered, overriding", type.getName());
+        }
+        registeredClasses.put(type.getName(), clazz);
     }
 
     public <T> boolean isCallAvailable(Class<T> type) {
@@ -117,10 +122,10 @@ public class CallManager {
             methodIds.ensureCapacity(callClass.getMethodCount());
 
             for (CallMethod method : callClass.getMethods()) {
-                method.setId(i++);
+                method.setNetworkId(i++);
 
                 activeMethods.add(method);
-                methodIds.put(method.getMethod(), method.getId());
+                methodIds.put(method.getMethod(), method.getNetworkId());
             }
         }
     }
@@ -134,7 +139,7 @@ public class CallManager {
 
             stream.writeInt(callClass.getMethods().size);
             for (CallMethod method : callClass.getMethods()) {
-                stream.writeInt(method.getId());
+                stream.writeInt(method.getNetworkId());
                 stream.writeUTF(method.getName());
                 stream.writeInt(method.getParameters().length);
                 for (Class<?> parameter : method.getParameters()) {
@@ -169,7 +174,6 @@ public class CallManager {
 
             CallClass<?> callClass = registeredClasses.get(className);
             if (callClass == null) {
-                Log.warn("Call class @ is present on server but not on client", className);
                 continue;
             }
 
@@ -187,14 +191,14 @@ public class CallManager {
                     CallMethod method = callClass.getMethods().find(m -> m.getName().equals(signature.getName()) && Arrays.equals(m.getParameters(), parameters));
                     if (method == null) {
                         activeMethods.add((CallMethod) null);
-                        Log.warn("Could not resolve method @ with parameters @ in class @", signature.getName(), Arrays.toString(parameters), className);
+                        Log.warn("Could not resolve method @(%s) with parameters @ in class @", signature.getName(), Arrays.toString(parameters), className);
                         continue;
                     }
 
-                    method.setId(signature.getId());
+                    method.setNetworkId(signature.getId());
 
                     activeMethods.add(method);
-                    methodIds.put(method.getMethod(), method.getId());
+                    methodIds.put(method.getMethod(), method.getNetworkId());
                 } catch (ClassNotFoundException exception) {
                     activeMethods.add((CallMethod) null);
                     Log.warn("Method @ in class @ contains invalid type @", signature.getName(), className, name);
@@ -268,6 +272,27 @@ public class CallManager {
 
     public ObjectIntMap<Method> getMethodIds() {
         return methodIds;
+    }
+
+    private static String getMethodSignature(Method method) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(method.getDeclaringClass().getName());
+        builder.append("#");
+        builder.append(method.getName());
+        builder.append("(");
+
+        Class<?>[] types = method.getParameterTypes();
+        for (int i = 0; i < types.length; i++) {
+            if (i != 0) {
+                builder.append(", ");
+            }
+            builder.append(types[i]);
+        }
+
+        builder.append(")");
+
+        return builder.toString();
     }
 
 }

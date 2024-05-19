@@ -1,18 +1,19 @@
-import io.github.redstonneur1256.gaw.AccessWidenerExtension
 import java.time.Instant
 
 plugins {
     `java-library`
     `maven-publish`
     id("com.github.johnrengelman.shadow") version ("8.1.1") apply (false)
-    id("io.github.redstonneur1256.gradle-access-widener") version ("0.2") apply (false)
 }
 
 subprojects {
+    if (project.name.contains("Android")) {
+        return@subprojects
+    }
+
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "com.github.johnrengelman.shadow")
-    apply(plugin = "io.github.redstonneur1256.gradle-access-widener")
 
     group = "fr.redstonneur1256"
     version = System.getenv("GITHUB_VERSION") ?: "dev"
@@ -25,17 +26,13 @@ subprojects {
         }
     }
 
-    configure<AccessWidenerExtension> {
-        paths.set(rootProject.files("assets/!mod-library.accessWidener"))
-    }
-
     tasks.withType(JavaCompile::class.java).configureEach {
         options.encoding = "UTF-8"
     }
 
     repositories {
         mavenCentral()
-        maven("https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository")
+        maven("https://raw.githubusercontent.com/Anuken/MindustryMaven/master/repository")
         maven("https://jitpack.io")
         maven("https://repo.mc-skyplex.net/releases")
     }

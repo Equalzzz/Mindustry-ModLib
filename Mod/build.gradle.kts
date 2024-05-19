@@ -1,7 +1,7 @@
 dependencies {
-    // compileOnly because common and launcher classes are provided by the launcher
     compileOnlyApi(project(":Launcher"))
     compileOnly(libs.bundles.mindustry)
+    api(libs.bundles.mindustry)
 }
 
 tasks.register("packJar", Jar::class.java) {

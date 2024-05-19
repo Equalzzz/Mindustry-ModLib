@@ -19,7 +19,6 @@ public class ArcSettings {
     public static final byte TYPE_STRING = 4;
     public static final byte TYPE_BINARY = 5;
 
-
     private Map<String, Object> values;
 
     public ArcSettings() {

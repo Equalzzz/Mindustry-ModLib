@@ -8,16 +8,14 @@ import mindustry.net.Packets;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Packets.StreamBegin.class)
 public class StreamBeginMixin implements PacketTypeAccessor {
 
-    @Shadow
-    public int id;
-    @Shadow
-    public int total;
-
-    private int intType;
+    public @Shadow int id;
+    public @Shadow int total;
+    private @Unique int intType;
 
     /**
      * @author Redstonneur1256
@@ -27,7 +25,7 @@ public class StreamBeginMixin implements PacketTypeAccessor {
     public void read(Reads reads) {
         id = reads.i();
         total = reads.i();
-        intType = NetworkUtil.readExtendedByte(reads::b);
+        intType = NetworkUtil.readVarInt(reads::b);
     }
 
     /**
@@ -38,7 +36,7 @@ public class StreamBeginMixin implements PacketTypeAccessor {
     public void write(Writes writes) {
         writes.i(id);
         writes.i(total);
-        NetworkUtil.writeExtendedByte(writes::b, intType);
+        NetworkUtil.writeVarInt(writes::b, intType);
     }
 
     @Override

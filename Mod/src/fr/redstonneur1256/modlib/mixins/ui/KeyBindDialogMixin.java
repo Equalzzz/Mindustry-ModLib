@@ -8,12 +8,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-
 @Mixin(KeybindDialog.class)
 public abstract class KeyBindDialogMixin extends Dialog {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void init(CallbackInfo ci) {
+        // we need to re-create the UI as new keybindings might have been added after it has been created
         shown(this::setup);
     }
 

@@ -4,9 +4,9 @@ import arc.struct.Seq;
 
 public class CallClass<T> {
 
-    private Class<T> type;
-    private T implementation;
-    private Seq<CallMethod> methods;
+    private final Class<T> type;
+    private final T implementation;
+    private final Seq<CallMethod> methods;
 
     public CallClass(Class<T> type, T implementation, Seq<CallMethod> methods) {
         this.type = type;

@@ -146,6 +146,8 @@ public class ModLibLauncher {
         initMixin();
         initAccessWidener();
 
+        System.setProperty("modlib.disableLogger", String.valueOf(!settings.get(Boolean.class, "modlib.logger", false)));
+
         Mixins.addConfiguration("launcher.mixins.json");
         loadModModifiers();
 

@@ -38,18 +38,22 @@ public class CustomCallExample {
 
     }
 
-    public static void init() {
-        MVars.net.registerCall(CustomCall.class, new CustomCall() {
-            @Override
-            public CallResult<Boolean> isFoo(Player player, String text) {
-                System.out.println("isFoo() got called from player " + player.name + " with text " + text);
-                if ("foo".equals(text)) {
-                    return CallResult.of(true);
-                }
-                // Exceptions can either be thrown directly or by returning CallResult#failed(Throwable)
-                throw new RuntimeException("it's not foo");
+    public static class CustomCallImplementation implements CustomCall {
+
+        @Override
+        public CallResult<Boolean> isFoo(Player player, String text) {
+            System.out.println("isFoo() got called from player " + player.name + " with text " + text);
+            if ("foo".equals(text)) {
+                return CallResult.of(true);
             }
-        });
+            // Exceptions can either be thrown directly or by returning CallResult#failed(Throwable)
+            throw new RuntimeException("it's not foo");
+        }
+
+    }
+
+    public static void init() {
+        MVars.net.registerCall(CustomCall.class, new CustomCallImplementation());
 
         // For the client side, every game tick:
         Events.run(EventType.Trigger.update, () -> {

@@ -1,8 +1,10 @@
 package fr.redstonneur1256.modlib.mixins.ui;
 
+import arc.Core;
 import arc.graphics.Color;
 import arc.scene.ui.layout.Table;
-import fr.redstonneur1256.modlib.launcher.ModLibLauncher;
+import fr.redstonneur1256.modlib.ModLib;
+import mindustry.Vars;
 import mindustry.mod.Mods;
 import mindustry.ui.dialogs.BaseDialog;
 import mindustry.ui.dialogs.ModsDialog;
@@ -18,10 +20,15 @@ public class ModsDialogMixin extends BaseDialog {
         super(title);
     }
 
-    @Inject(method = "reload", at = @At("HEAD"))
+    @Inject(method = "reload", at = @At("HEAD"), cancellable = true)
     public void reload(CallbackInfo ci) {
-        ModLibLauncher.launcher.restartGame = true;
-        ModLibLauncher.launcher.fastRestart = false;
+        // Foo's client has a restart that prevents this from working
+        ci.cancel();
+
+        Vars.ui.showInfoOnHidden("@mods.reloadexit", () -> {
+            ModLib.restartOnExit(true);
+            Core.app.exit();
+        });
     }
 
     @Inject(
