@@ -1,5 +1,5 @@
 # Contributing
-
+I'm not the original mod's author, and I barely know java and project management, so I will be very glad if you DM me in discord - equalzzz.
 If you want to contribute to the project here is a few guidelines to follow:
 
 ### Use an IDE
