@@ -1,5 +1,5 @@
 dependencies {
-    compileOnlyApi(project(":Launcher"))
+    compileOnly(project(":Launcher"))
     compileOnly(libs.bundles.mindustry)
     api(libs.bundles.mindustry)
 }
