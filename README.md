@@ -28,20 +28,26 @@ Using the library:
 
 - Add the dependency on Gradle:
   ```groovy
+    sourceSets.main.java.srcDirs = ["src", "assets"] // just add "assets"
+    
     repositories {
-        mavenCentral()
-        maven { url "https://jitpack.io/" }
+        maven {
+        url = 'https://jitpack.io'
+        content { includeGroup "com.github.Equalzzz" }
+    }
     }
     
     dependencies {
-        compileOnly("com.github.Redstonneur1256.Mindustry-ModLib:Mod:VERSION")
+        compileOnly("com.github.Equalzzz:Mindustry-ModLib:VERSION")
+        compileOnly('org.spongepowered:mixin:0.8.7')
+        compileOnly('org.jetbrains:annotations:24.0.1')
     }
+    
   ```
-- Update your `mod.json`/`plugin.json` to add the library as a dependency.
-  ```json
-  "dependencies": [
-    "!mod-library"
-  ]
+  You can also choose v8-SNAPSHOT as version for now
+- Update your `mod.hjson`/`plugin.hjson` to add the library as a dependency.
+  ```hjson
+  dependencies: [ "!mod-library" ]
   ```
 - If using access-wideners you will require the [gradle-access-widener](https://github.com/Redstonneur1256/GradleAccessWidener),
   please refer to the plugin's documentation for configuration instructions.
@@ -49,7 +55,7 @@ Using the library:
 Mixin/Access widener files must be present at the root of the mod's file structure, the files name excluding the extension
 must be the exact same than the `name` property defined in your `mod.(h)json`/`plugin.(h)json`.
 
-See the `Example` module for usage examples.
+~~See the `Example` module for usage examples.~~ It's a bit outdated, but I believe in you.
 
 Contributing:
 ------
