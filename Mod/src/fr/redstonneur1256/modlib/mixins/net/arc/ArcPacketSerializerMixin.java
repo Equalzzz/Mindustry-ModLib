@@ -106,7 +106,8 @@ public abstract class ArcPacketSerializerMixin {
             packetBuffer.position(0);
             packetBuffer.put(buffer.array(), buffer.position(), length);
         } else {
-            finalLength = MNet.decompressor.decompress(buffer, buffer.position(), packetBuffer, 0, length);
+            // I don't know if it works properly
+            finalLength = MNet.decompressor.decompress(buffer.array(), buffer.position(), length, packetBuffer.array(), 0, length);
         }
         buffer.position(buffer.position() + finalLength); // simulate packet has been read
 

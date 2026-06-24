@@ -2,6 +2,7 @@ package fr.redstonneur1256.modlib.launcher.mixin;
 
 import fr.redstonneur1256.modlib.launcher.ModLibLauncher;
 import fr.redstonneur1256.modlib.launcher.util.Util;
+import jdk.jshell.spi.ExecutionControl;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.service.IClassBytecodeProvider;
@@ -32,5 +33,20 @@ public class ModLibMixinByteCodeProvider implements IClassBytecodeProvider {
     public ClassNode getClassNode(String name, boolean runTransformers) throws ClassNotFoundException, IOException {
         return getClassNode(name);
     }
+
+    @Override
+    public ClassNode getClassNode(String name, boolean runTransformers, int readerFlags) throws ClassNotFoundException, IOException {
+        return getClassNode(name); // ?
+    }
+
+    //@Override
+    //public ClassNode getClassNode(String name, boolean runTransformers, int flags) throws ClassNotFoundException, IOException {
+    //    return getClassNode(name); // ?
+    //    //try {
+    //    //    throw new ExecutionControl.NotImplementedException("getClassNode not yet implemented");
+    //    //} catch (ExecutionControl.NotImplementedException e) {
+    //    //    throw new RuntimeException(e);
+    //    //}
+    //}
 
 }

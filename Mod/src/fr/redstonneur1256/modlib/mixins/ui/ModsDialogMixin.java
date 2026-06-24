@@ -20,16 +20,15 @@ public class ModsDialogMixin extends BaseDialog {
         super(title);
     }
 
-    @Inject(method = "reload", at = @At("HEAD"), cancellable = true)
-    public void reload(CallbackInfo ci) {
-        // Foo's client has a restart that prevents this from working
-        ci.cancel();
-
-        Vars.ui.showInfoOnHidden("@mods.reloadexit", () -> {
-            ModLib.restartOnExit(true);
-            Core.app.exit();
-        });
-    }
+    //@Inject(method = "reload", at = @At("HEAD"), cancellable = true)
+    //public void reload(CallbackInfo ci) {
+    //    // Foo's client has a restart that prevents this from working
+    //    ci.cancel();
+    //    Vars.ui.showInfoOnHidden("@mods.reloadexit", () -> {
+    //        ModLib.restartOnExit(true);
+    //        Core.app.exit();
+    //    });
+    //}
 
     @Inject(
             method = "*(Lmindustry/mod/Mods$LoadedMod;Larc/scene/ui/layout/Table;)V",

@@ -26,6 +26,7 @@ import mindustry.net.Net;
 import mindustry.net.NetConnection;
 import net.jpountz.lz4.LZ4Compressor;
 import net.jpountz.lz4.LZ4FastDecompressor;
+import net.jpountz.lz4.LZ4SafeDecompressor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MNet implements MConnection {
 
-    public static final LZ4FastDecompressor decompressor = Reflect.get(ArcNetProvider.class, "decompressor");
+    public static final LZ4SafeDecompressor decompressor = Reflect.get(ArcNetProvider.class, "decompressor");
     public static final LZ4Compressor compressor = Reflect.get(ArcNetProvider.class, "compressor");
 
     private UdpConnectionManager udpConnectionManager;

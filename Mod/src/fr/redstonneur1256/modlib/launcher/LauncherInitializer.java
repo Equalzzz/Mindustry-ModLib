@@ -60,7 +60,7 @@ public class LauncherInitializer {
             Core.settings.setAutosave(false);
 
             List<String> command = new ArrayList<>(8);
-            command.add(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java" + (OS.isWindows ? ".exe" : ""));
+            command.add(Vars.dataDirectory.child("modlib-jre").child("jdk-25.0.3+9-jre").path() + File.separator + "bin" + File.separator + "java" + (OS.isWindows ? ".exe" : ""));
 
             if (isBundledJVM()) {
                 command.add("-Dhttps.protocols=TLSv1.2,TLSv1.1,TLSv1");
@@ -69,11 +69,12 @@ public class LauncherInitializer {
             if (OS.isMac) {
                 command.add("-XstartOnFirstThread");
             }
-            try {
-                command.addAll(ManagementFactory.getRuntimeMXBean().getInputArguments());
-            } catch (Throwable exception) {
-                Log.err("Unable to add current java arguments", exception);
-            }
+
+            //try {
+            //    command.addAll(ManagementFactory.getRuntimeMXBean().getInputArguments());
+            //} catch (Throwable exception) {
+            //    Log.err("Unable to add current java arguments", exception);
+            //}
 
             command.add("-jar");
             command.add(launcherFile.absolutePath());

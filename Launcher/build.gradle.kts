@@ -1,8 +1,15 @@
 dependencies {
     compileOnly(libs.bundles.mindustry)
 
+
     api(project(":Common"))
+    // for refmaps
+    //annotationProcessor("org.spongepowered:mixin:0.8.7:processor")
+
     api(libs.mixin)
+    // mixin dependency
+    api(libs.guava)
+
     api(libs.bundles.asm)
     api(libs.accesswidener)
     api(libs.gson)

@@ -3,7 +3,7 @@ package fr.redstonneur1256.examplemod.net.packet.direct;
 import arc.Core;
 import arc.Events;
 import arc.util.Log;
-import fr.redstonneur1256.examplemod.ExampleKeyBinds;
+//import fr.redstonneur1256.examplemod.ExampleKeyBinds;
 import fr.redstonneur1256.modlib.MVars;
 import fr.redstonneur1256.modlib.events.net.PlayerDataSyncedEvent;
 import fr.redstonneur1256.modlib.net.packet.MConnection;
@@ -50,26 +50,26 @@ public class CustomPacketExample {
         });
 
         // For the client side, every game tick:
-        Events.run(EventType.Trigger.update, () -> {
-
-            // Check if the key J has been tapped, and we are connected to a server
-            if (Core.input.keyTap(ExampleKeyBinds.demo) && Vars.net.client()) {
-
-                // Check if the server we are currently connected on support this packet
-                // If you try to send the packet on a server where it's not supported it will be
-                // silently discarded to avoid client being disconnected
-                if (MVars.net.supportsPacket(MessagePacket.class)) {
-
-                    // Send a simple packet to the server saying hello
-                    MessagePacket packet = new MessagePacket();
-                    packet.message = "Hello server";
-                    Vars.net.send(packet, true);
-                } else {
-                    // If the packet isn't available to the server
-                    Vars.ui.announce("[red]The server doesn't have the MessagePacket");
-                }
-            }
-        });
+//        Events.run(EventType.Trigger.update, () -> {
+//
+//            // Check if the key J has been tapped, and we are connected to a server
+//            if (Core.input.keyTap(ExampleKeyBinds.demo) && Vars.net.client()) {
+//
+//                // Check if the server we are currently connected on support this packet
+//                // If you try to send the packet on a server where it's not supported it will be
+//                // silently discarded to avoid client being disconnected
+//                if (MVars.net.supportsPacket(MessagePacket.class)) {
+//
+//                    // Send a simple packet to the server saying hello
+//                    MessagePacket packet = new MessagePacket();
+//                    packet.message = "Hello server";
+//                    Vars.net.send(packet, true);
+//                } else {
+//                    // If the packet isn't available to the server
+//                    Vars.ui.announce("[red]The server doesn't have the MessagePacket");
+//                }
+//            }
+//        });
     }
 
 }

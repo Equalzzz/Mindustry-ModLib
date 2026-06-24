@@ -1,20 +1,28 @@
 [versions]
-asm = "9.6"
-mindustry = "v146"
+asm = "9.8"
+mindustry = "v158.1"
 
 [libraries]
 annotations = "org.jetbrains:annotations:24.0.1"
-anuken-arc-core = { module = "com.github.Anuken.Arc:arc-core", version.ref = "mindustry" }
-anuken-arc-android = { module = "com.github.Anuken.Arc:backend-android", version.ref = "mindustry" }
-anuken-mindustry = { module = "com.github.Anuken.Mindustry:core", version.ref = "mindustry" }
+
+#anuken-arc-core = "com.github.Anuken.Arc:arc-core:0e5679dc9c"
+#anuken-arc-android = "com.github.Anuken.Arc:backend-android:0e5679dc9c"
+anuken-mindustry = "Anuken:Mindustry:v158.1"
+
 asm-tree = { module = "org.ow2.asm:asm-tree", version.ref = "asm" }
 asm-commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm" }
 asm-util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
+
+guava = "com.google.guava:guava:33.2.1-jre"
+
 accesswidener = "net.fabricmc:access-widener:2.1.0"
-mixin = "org.spongepowered:mixin:0.8.5"
+
+mixin = "org.spongepowered:mixin:0.8.7"
+
 gson = "com.google.code.gson:gson:2.10.1"
 hjson = "org.hjson:hjson:3.0.0"
 
 [bundles]
-mindustry = ["anuken-arc-core", "anuken-mindustry"]
+mindustry = ["anuken-mindustry"]
+#mindustry = ["anuken-arc-core", "anuken-mindustry"]
 asm = ["asm-tree", "asm-commons", "asm-util"]

@@ -15,7 +15,7 @@ public class MainMod extends Mod {
     @Override
     public void init() {
         // Register custom keybindings (needed by all the examples, do not comment)
-        ExampleKeyBinds.register();
+        //ExampleKeyBinds.register();
 
         // Send custom packets to the server/client
         CustomPacketExample.init();

@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
@@ -131,12 +130,14 @@ public class ModLibLauncher {
     }
 
     private void openGame() throws Exception {
-        Logger.log("  __  __           _ _      _ _     \n" +
-                " |  \\/  |         | | |    (_) |    \n" +
-                " | \\  / | ___   __| | |     _| |__  \n" +
-                " | |\\/| |/ _ \\ / _` | |    | | '_ \\ \n" +
-                " | |  | | (_) | (_| | |____| | |_) |\n" +
-                " |_|  |_|\\___/ \\__,_|______|_|_.__/");
+        Logger.log("""
+                  __  __           _ _      _ _    \s
+                 |  \\/  |         | | |    (_) |   \s
+                 | \\  / | ___   __| | |     _| |__ \s
+                 | |\\/| |/ _ \\ / _` | |    | | '_ \\\s
+                 | |  | | (_) | (_| | |____| | |_) |
+                 |_|  |_|\\___/ \\__,_|______|_|_.__/\
+                """);
         Logger.log("Launcher version %s (build %s), released %s (%d days ago)%n", ModLibProperties.VERSION,
                 ModLibProperties.BUILD, ModLibProperties.BUILT, ChronoUnit.DAYS.between(ModLibProperties.BUILT, Instant.now()));
 
@@ -148,7 +149,7 @@ public class ModLibLauncher {
 
         System.setProperty("modlib.disableLogger", String.valueOf(!settings.get(Boolean.class, "modlib.logger", false)));
 
-        Mixins.addConfiguration("launcher.mixins.json");
+        Mixins.addConfiguration("launcher.mixins.json", null);
         loadModModifiers();
 
         service.onGameStart();
@@ -206,9 +207,21 @@ public class ModLibLauncher {
     private void initMixin() throws ReflectiveOperationException {
         Logger.log("Initializing Mixin");
 
+        //System.setProperty("mixin.initialised", "true");
+        //System.setProperty("mixin.checks.interfaces", "false");
+        //System.setProperty("mixin.env.disableRefMap", "true");
+
         MixinBootstrap.init();
+
+        // ??
+        //Thread.currentThread().setContextClassLoader(ModLibLauncher.class.getClassLoader());
+
         service = (ModLibMixinService) MixinService.getService();
-        MixinEnvironment.getCurrentEnvironment().setSide(server ? MixinEnvironment.Side.SERVER : MixinEnvironment.Side.CLIENT);
+        //service.beginPhase();
+        //Logger.log(String.valueOf(MixinService.));
+        MixinEnvironment env = MixinEnvironment.getDefaultEnvironment();
+        env.setSide(server ? MixinEnvironment.Side.SERVER : MixinEnvironment.Side.CLIENT);
+        //env.setOption(MixinEnvironment.Option.DISABLE_REFMAP, true);
 
         loader.addTransformer(new MixinClassTransformer());
     }
@@ -248,7 +261,7 @@ public class ModLibLauncher {
 
     private void loadMod(String pathName, FileProvider provider) throws IOException, ParseException {
         Optional<String> optional = Arrays.stream(META_FILES).filter(provider::exists).findFirst();
-        if (!optional.isPresent()) {
+        if (optional.isEmpty()) {
             Logger.err("Could not find a meta file for mod file \"%s\"", pathName);
             return;
         }
@@ -262,7 +275,7 @@ public class ModLibLauncher {
                         .values()
                         .stream()
                         .map(JsonValue::asString)
-                        .collect(Collectors.toList()));
+                        .toList());
             }
 
             String name = metadata.get("name").asString();
@@ -273,7 +286,7 @@ public class ModLibLauncher {
 
             String mixinsPath = name + ".mixins.json";
             if (provider.exists(mixinsPath)) {
-                Mixins.addConfiguration(mixinsPath);
+                Mixins.addConfiguration(mixinsPath, null);
             }
 
             String widenerPath = name + ".accessWidener";

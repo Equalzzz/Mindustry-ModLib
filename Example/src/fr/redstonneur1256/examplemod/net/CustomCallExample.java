@@ -4,7 +4,7 @@ import arc.Core;
 import arc.Events;
 import arc.input.KeyCode;
 import arc.util.Log;
-import fr.redstonneur1256.examplemod.ExampleKeyBinds;
+//import fr.redstonneur1256.examplemod.ExampleKeyBinds;
 import fr.redstonneur1256.modlib.MVars;
 import fr.redstonneur1256.modlib.net.call.CallResult;
 import fr.redstonneur1256.modlib.net.call.Execution;
@@ -56,30 +56,30 @@ public class CustomCallExample {
         MVars.net.registerCall(CustomCall.class, new CustomCallImplementation());
 
         // For the client side, every game tick:
-        Events.run(EventType.Trigger.update, () -> {
-            // Check if the key J has been tapped
-            if (Core.input.keyTap(ExampleKeyBinds.demo) && Vars.net.client()) {
-
-                // From client side we need to check if the call class is available on the server using MVars.net.isCallAvailable
-                // Trying to use an unavailable call class will lead in a NoSuchMethodError
-                if (!MVars.net.isCallAvailable(CustomCall.class)) {
-                    Log.warn("The custom call class is not available on the server, unable to call the method");
-                    return;
-                }
-
-                // Obtain our custom call:
-                CustomCall call = MVars.net.getCall(CustomCall.class);
-                // Invoke the method (on client side passing the player parameter is ignored, on server side it will call at the player)
-                CallResult<Boolean> result = call.isFoo(null, Core.input.keyDown(KeyCode.h) ? "notFoo" : "foo");
-                // Listen for the result
-                result.listen(
-                        is -> Log.info("Is it foo ? @", is),
-                        err -> Log.err("It might not be foo", err),
-                        () -> Log.warn("too long, ignoring result"),
-                        1, TimeUnit.SECONDS
-                );
-            }
-        });
+//        Events.run(EventType.Trigger.update, () -> {
+//            // Check if the key J has been tapped
+//            if (Core.input.keyTap(ExampleKeyBinds.demo) && Vars.net.client()) {
+//
+//                // From client side we need to check if the call class is available on the server using MVars.net.isCallAvailable
+//                // Trying to use an unavailable call class will lead in a NoSuchMethodError
+//                if (!MVars.net.isCallAvailable(CustomCall.class)) {
+//                    Log.warn("The custom call class is not available on the server, unable to call the method");
+//                    return;
+//                }
+//
+//                // Obtain our custom call:
+//                CustomCall call = MVars.net.getCall(CustomCall.class);
+//                // Invoke the method (on client side passing the player parameter is ignored, on server side it will call at the player)
+//                CallResult<Boolean> result = call.isFoo(null, Core.input.keyDown(KeyCode.h) ? "notFoo" : "foo");
+//                // Listen for the result
+//                result.listen(
+//                        is -> Log.info("Is it foo ? @", is),
+//                        err -> Log.err("It might not be foo", err),
+//                        () -> Log.warn("too long, ignoring result"),
+//                        1, TimeUnit.SECONDS
+//                );
+//            }
+//        });
+//    }
     }
-
 }

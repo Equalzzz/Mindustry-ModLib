@@ -4,7 +4,6 @@ import fr.redstonneur1256.modlib.launcher.ModLibLauncher;
 import org.spongepowered.asm.launch.platform.container.ContainerHandleVirtual;
 import org.spongepowered.asm.launch.platform.container.IContainerHandle;
 import org.spongepowered.asm.logging.ILogger;
-import org.spongepowered.asm.logging.LoggerAdapterConsole;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.service.*;
 import org.spongepowered.asm.util.IConsumer;
@@ -15,9 +14,9 @@ import java.util.Collections;
 
 public class ModLibMixinService extends MixinServiceAbstract {
 
-    private ModLibMixinClassProvider mixinClassProvider;
-    private ModLibMixinByteCodeProvider mixinByteCodeProvider;
-    private ContainerHandleVirtual containerHandleVirtual;
+    private final ModLibMixinClassProvider mixinClassProvider;
+    private final ModLibMixinByteCodeProvider mixinByteCodeProvider;
+    private final ContainerHandleVirtual containerHandleVirtual;
     private IConsumer<MixinEnvironment.Phase> phaseConsumer;
 
     public ModLibMixinService() {
@@ -37,12 +36,8 @@ public class ModLibMixinService extends MixinServiceAbstract {
     }
 
     @Override
-    public MixinEnvironment.Phase getInitialPhase() {
-        return MixinEnvironment.Phase.PREINIT;
-    }
-
-    @Override
     public void init() {
+        super.init();
     }
 
     public void onGameStart() {
@@ -83,7 +78,8 @@ public class ModLibMixinService extends MixinServiceAbstract {
 
     @Override
     public Collection<String> getPlatformAgents() {
-        return Collections.singleton("fr.redstonneur1256.modlib.launcher.mixin.ModLibMixinPlatformServiceAgent");
+        return Collections.emptyList();
+        //return Collections.singleton("fr.redstonneur1256.modlib.launcher.mixin.ModLibMixinPlatformServiceAgent");
     }
 
     @Override
@@ -98,7 +94,7 @@ public class ModLibMixinService extends MixinServiceAbstract {
 
     @Override
     protected ILogger createLogger(String name) {
-        LoggerAdapterConsole logger = new LoggerAdapterConsole("ModLib-" + name);
+        ModLibLoggerAdapterConsole logger = new ModLibLoggerAdapterConsole("ModLib-" + name);
         if (ModLibLauncher.launcher.debug()) {
             logger.setDebugStream(System.out);
         }

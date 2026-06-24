@@ -1,10 +1,10 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "fr.redstonneur1256.modlib.mixins",
-  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "KeyBindsMixin",
+
     "entity.PlayerMixin",
     "gen.SoundsMixin",
     "net.CallMixin",
@@ -13,7 +13,7 @@
     "net.arc.ArcPacketSerializerMixin",
     "net.packets.StreamBeginMixin",
     "net.packets.StreamBuilderMixin",
-    "ui.KeyBindDialogMixin",
+
     "ui.ModsDialogMixin"
   ],
   "injectors": {

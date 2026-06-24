@@ -19,11 +19,13 @@ subprojects {
     version = System.getenv("GITHUB_VERSION") ?: "dev"
 
     java {
-        withJavadocJar()
-        withSourcesJar()
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(8))
-        }
+//        withJavadocJar()
+//        withSourcesJar()
+//        toolchain {
+//            languageVersion.set(JavaLanguageVersion.of(8))
+//        }
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
     }
 
     tasks.withType(JavaCompile::class.java).configureEach {
@@ -32,9 +34,28 @@ subprojects {
 
     repositories {
         mavenCentral()
-        maven("https://raw.githubusercontent.com/Anuken/MindustryMaven/master/repository")
         maven("https://jitpack.io")
-        maven("https://repo.mc-skyplex.net/releases")
+
+        maven("https://repo.spongepowered.org/repository/maven-public/")
+
+        ivy {
+            url = uri("https://github.com/")
+            patternLayout {
+                artifact("/[organisation]/[module]/releases/download/[revision]/dependencies.jar")
+            }
+            metadataSources {
+                artifact()
+            }
+        }
+        ivy {
+            url = uri("https://github.com/")
+            patternLayout {
+                artifact("/[organisation]/[module]/releases/[revision]/download/dependencies.jar")
+            }
+            metadataSources {
+                artifact()
+            }
+        }
     }
 
     sourceSets {

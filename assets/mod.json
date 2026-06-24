@@ -1,14 +1,14 @@
 {
   "name": "!mod-library",
-  "displayName": "Mod Library",
-  "author": "Redstonneur1256",
+  "displayName": "Mod Library (NOT OFFICIAL)",
+  "author": "Equalzzz",
   "subtitle": "Modding utilities & game optimizations",
-  "description": "Mindustry modding utilities to make mod development easier.",
+  "description": "Mindustry modding utilities to make mod development easier. NOT AN OFFICIAL VERSION",
   "repo": "Redstonneur1256/Mindustry-ModLib",
   "version": "${version}",
   "build": "${build}",
   "built": "${built}",
-  "minGameVersion": 142,
+  "minGameVersion": 158,
   "hidden": true,
   "java": true,
   "main": "fr.redstonneur1256.modlib.ModLib"

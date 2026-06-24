@@ -1,5 +1,6 @@
 package fr.redstonneur1256.modlib.launcher;
 
+import fr.redstonneur1256.modlib.launcher.log.Logger;
 import fr.redstonneur1256.modlib.launcher.util.Util;
 
 import java.net.JarURLConnection;
