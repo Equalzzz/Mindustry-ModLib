@@ -1,7 +1,12 @@
 name: Build for release
+
 on:
   release:
     types: [ published ]
+
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -30,7 +35,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./Mod/build/libs/ModLib.jar
-          asset_name: ModLib.jar
-          asset_content_type: application/zip
+          files: ./Mod/build/libs/ModLib.jar
