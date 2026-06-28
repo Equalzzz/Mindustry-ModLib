@@ -32,9 +32,12 @@ Using the library:
     
     repositories {
         maven {
-        url = 'https://jitpack.io'
-        content { includeGroup "com.github.Equalzzz" }
-    }
+          url = 'https://jitpack.io'
+          content { includeGroup "com.github.Equalzzz" }
+        }
+        maven {
+          url = 'https://repo.spongepowered.org/repository/maven-public/'
+        }
     }
     
     dependencies {
